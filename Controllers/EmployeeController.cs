@@ -8,7 +8,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using EntityFrameworkPaginate;
 using WebAPI.Models;
+using PagedList;
 
 namespace WebAPI.Controllers
 {
@@ -17,10 +19,33 @@ namespace WebAPI.Controllers
         private EmployeeDB db = new EmployeeDB();
 
         // GET: api/Employee
-        public IQueryable<Employee> GetEmployees()
+        public IQueryable<Employee> GetEmployees(string searchText, int pageNumber, int pageSize )
         {
-            return db.Employees;
+            var employees = from e in db.Employees select e;
+            int takeList = pageSize;
+            int skippedList = pageSize * pageNumber;
+            
+            if (!String.IsNullOrEmpty(searchText))
+            {
+                employees = employees.Where(e => e.FullName.Contains(searchText));
+            }
+
+            return employees.Skip(skippedList).Take(takeList);
         }
+
+        //public IQueryable<Employee> GetEmployees(int pageSize, int currentPage, string searchText )
+        /* public IQueryable<Employee> GetEmployees(int pageSize, int currentPage, string searchText)
+         {
+             var filters = new Filters<Employee>();
+             filters.Add(!string.IsNullOrEmpty(searchText), x => x.Contains(searchText));
+
+             using (var context = new AdventureWorksEntities()) { 
+
+ }
+
+
+             return db.Employees;
+         }*/
 
         // GET: api/Employee/5
         [ResponseType(typeof(Employee))]
