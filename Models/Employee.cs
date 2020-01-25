@@ -14,7 +14,7 @@ namespace WebAPI.Models
     
     public partial class Employee
     {
-        public int EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         public string FullName { get; set; }
         public string EMPCode { get; set; }
         public string Mobile { get; set; }

@@ -11,13 +11,16 @@ namespace WebAPI
         public static void Register(HttpConfiguration config)
         {
             //Enable Cors
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var cors = new EnableCorsAttribute(
+                origins: "*",
+                headers: "*",
+                methods: "*"
+            );
             config.EnableCors(cors);
             // Web API configuration and services
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
